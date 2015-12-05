@@ -1,0 +1,45 @@
+From 57195d87469dbf1cb748ed5e6d1c90e58022b8cc Mon Sep 17 00:00:00 2001
+From: Igor Gnatenko <i.gnatenko.brain@gmail.com>
+Date: Sat, 5 Dec 2015 17:10:50 +0100
+Subject: [PATCH 1/2] VTK6 support
+
+Signed-off-by: Igor Gnatenko <i.gnatenko.brain@gmail.com>
+---
+ cmake/VtkOption.cmake        | 5 ++---
+ tools/add_dataset_to_vtk.cpp | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/cmake/VtkOption.cmake b/cmake/VtkOption.cmake
+index b4bb39d..f41ad67 100644
+--- a/cmake/VtkOption.cmake
++++ b/cmake/VtkOption.cmake
+@@ -5,11 +5,10 @@
+ option(USE_VTK "Build the project using VTK" OFF)
+ 
+ if (USE_VTK)
+-    find_package(VTK)
++    find_package(VTK COMPONENTS vtkIOXML vtkIOLegacy vtkRenderingOpenGL vtkInteractionStyle vtkRenderingVolumeOpenGL vtkRenderingFreeType NO_MODULE)
+     if (VTK_FOUND)
+         include(${VTK_USE_FILE})
+-        set (VTK_LIBRARIES vtkGraphics vtkIO vtkCommon)
+-        # vtkRendering vtkHybrid vtkImaging vtkFiltering vtkGenericFiltering vtkDICOMParser vtkzlib
++        set_property(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS ${VTK_DEFINITIONS})
+         set(OPENMEEG_OTHER_LIBRARY_DIRECTORIES ${VTK_LIBRARY_DIRS} ${OPENMEEG_OTHER_LIBRARY_DIRECTORIES})
+         set(OPENMEEG_OTHER_INCLUDE_DIRECTORIES ${OPENMEEG_OTHER_INCLUDE_DIRECTORIES} ${VTK_INCLUDE_DIRS})
+         set(OPENMEEG_LIBRARIES ${OPENMEEG_LIBRARIES} ${VTK_LIBRARIES})
+diff --git a/tools/add_dataset_to_vtk.cpp b/tools/add_dataset_to_vtk.cpp
+index 33f144b..0683d2a 100644
+--- a/tools/add_dataset_to_vtk.cpp
++++ b/tools/add_dataset_to_vtk.cpp
+@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
+     // save output to the input file
+     vtkSmartPointer<vtkPolyDataWriter> writer = vtkSmartPointer<vtkPolyDataWriter>::New();
+     writer->SetFileName(meshFileNameO.c_str());
+-    writer->SetInput(mesh);
++    writer->SetInputData(mesh);
+     writer->Write();
+     std::cerr << "saved into " << meshFileNameO << "." << std::endl;
+ 
+-- 
+2.6.3
+

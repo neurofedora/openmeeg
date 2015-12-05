@@ -1,0 +1,80 @@
+From b2d6fae77a65641c96c85f33877b39d7c368e2fe Mon Sep 17 00:00:00 2001
+From: Igor Gnatenko <i.gnatenko.brain@gmail.com>
+Date: Sat, 5 Dec 2015 18:18:59 +0100
+Subject: [PATCH 2/2] Install CMake files to proper location
+
+Signed-off-by: Igor Gnatenko <i.gnatenko.brain@gmail.com>
+---
+ CMakeLists.txt                 | 10 +++++-----
+ cmake/GenerateConfigFile.cmake |  2 +-
+ cmake/OpenMEEGConfig.cmake.in  |  3 ---
+ 3 files changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 38650c7..3dc7ba6 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -235,17 +235,17 @@ configure_file(
+ # Generate another configure for installation
+ 
+ set(OPENMEEG_INCLUDE_DIRECTORIES
+-    ${OPENMEEG_HEADER_INSTALLDIR}
++    ${CMAKE_INSTALL_PREFIX}/${OPENMEEG_HEADER_INSTALLDIR}
+     ${OPENMEEG_OTHER_INCLUDE_DIRECTORIES}
+ )
+ set(OPENMEEG_LIBRARY_DIRECTORIES
+-    ${CMAKE_install_PREFIX}/lib
++    ${LIB_INSTALL_DIR}
+     ${OPENMEEG_OTHER_LIBRARY_DIRECTORIES}
+ )
+ 
+ # The "use" file.
+ 
+-set(OPENMEEG_USE_FILE ${CMAKE_install_PREFIX}/lib/UseOpenMEEG.cmake)
++set(OPENMEEG_USE_FILE ${LIB_INSTALL_DIR}/cmake/OpenMEEG/UseOpenMEEG.cmake)
+ 
+ # Configure OpenMEEGConfig.cmake for the install tree.
+ 
+@@ -254,10 +254,10 @@ configure_file(
+     ${OpenMEEG_BINARY_DIR}/cmake/OpenMEEGConfig.cmake @ONLY IMMEDIATE)
+ 
+ install(FILES ${OpenMEEG_BINARY_DIR}/UseOpenMEEG.cmake
+-    DESTINATION ${INSTALL_DATA_DIR}/OpenMEEG/cmake)
++    DESTINATION ${LIB_INSTALL_DIR}/cmake/OpenMEEG)
+ 
+ install(FILES ${OpenMEEG_BINARY_DIR}/cmake/OpenMEEGConfig.cmake
+-    DESTINATION ${INSTALL_DATA_DIR}/OpenMEEG/cmake)
++    DESTINATION ${LIB_INSTALL_DIR}/cmake/OpenMEEG)
+ 
+ # Install README
+ 
+diff --git a/cmake/GenerateConfigFile.cmake b/cmake/GenerateConfigFile.cmake
+index 0f68144..0cf7c20 100644
+--- a/cmake/GenerateConfigFile.cmake
++++ b/cmake/GenerateConfigFile.cmake
+@@ -69,7 +69,7 @@ macro(Dependencies ConfigName)
+             endif()
+         endforeach()
+         include(${DepFileName})
+-        install(FILES ${DepFileName} DESTINATION ${INSTALL_DATA_DIR}/${ConfigName}/cmake)
++        install(FILES ${DepFileName} DESTINATION ${LIB_INSTALL_DIR}/cmake/${ConfigName})
+     endif()
+ endmacro()
+ 
+diff --git a/cmake/OpenMEEGConfig.cmake.in b/cmake/OpenMEEGConfig.cmake.in
+index 07b178c..cc8dd18 100755
+--- a/cmake/OpenMEEGConfig.cmake.in
++++ b/cmake/OpenMEEGConfig.cmake.in
+@@ -6,9 +6,6 @@
+ # This file is configured by OpenMEEG and used by the UseOpenMEEG.cmake module
+ # to load OpenMEEG's settings for an external project.
+ 
+-# The OpenMEEG source tree.
+-set(OpenMEEG_SOURCE_DIR "@OPENMEEG_SOURCE_DIRECTORIES@")
+-
+ # The OpenMEEG include file directories.
+ set(OpenMEEG_INCLUDE_DIRS "@OPENMEEG_INCLUDE_DIRECTORIES@")
+ 
+-- 
+2.6.3
+
