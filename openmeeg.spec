@@ -3,7 +3,7 @@
 
 Name:           openmeeg
 Version:        2.3
-Release:        0.1.git%{shortcommit}%{?dist}
+Release:        0.2.git%{shortcommit}%{?dist}
 Summary:        Low-frequency bio-electromagnetism solving forward problems in the field of EEG and MEG
 
 License:        CeCILL-B
@@ -19,7 +19,7 @@ BuildRequires:  atlas-devel blas-devel lapack-devel
 #BuildRequires:  vtk-devel
 BuildRequires:  hdf5-devel
 BuildRequires:  matio-devel
-BuildRequires:  gifticlib-devel
+BuildRequires:  gifticlib-devel nifticlib-devel
 BuildRequires:  swig
 
 %description
@@ -82,5 +82,8 @@ popd
 %{_libdir}/cmake/OpenMEEG/
 
 %changelog
+* Sun Dec 06 2015 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 2.3-0.2.git7d23602
+- BuildRequires: nifticlib-devel
+
 * Sat Dec 05 2015 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 2.3-0.1.git7d23602
 - Initial package
